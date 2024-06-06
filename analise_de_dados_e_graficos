@@ -1,0 +1,71 @@
+import pandas as pd
+
+dados = pd.read_excel("vendas.xlsx")
+
+#primeiros dados
+dados.head()
+
+
+# ultimos dados
+dados.tail()
+
+
+# formato da tabela de dados (linhas, colunas)
+dados.shape
+
+
+# Informações dos dados
+dados.info()
+
+
+# pesquisa sobre dados especificos
+dados[["loja", "tamanho"]]
+
+
+dados.describe()
+
+# contagem de vendas por loja
+dados["cidade"]. value_counts()
+
+
+dados["loja"]. value_counts()
+
+
+dados["forma_pagamento"]. value_counts()
+
+
+dados.groupby("loja")["preco"].sum().to_frame()
+
+
+dados.groupby("local_consumo")["preco"].sum().to_frame()
+
+
+dados_agrupados = dados.groupby(["estado", "cidade", "loja", "forma_pagamento"])["preco"].sum().to_frame()
+dados_agrupados.to_excel("Faturamento.xlsx")
+
+
+import plotly.express as px
+
+
+grafico = px.histogram(dados, x="loja",
+                    y="preco",
+                  text_auto=True,
+                  title="faturamento",
+                  color="forma_pagamento")
+grafico.show()
+grafico.write_html("faturamento.html")
+
+
+
+lista_colunas = ["loja", "cidade", "estado", "tamanho", "local_consumo"]
+
+for coluna in lista_colunas:
+    grafico = px.histogram(dados, x=coluna,
+                           y="preco",
+                           text_auto=True,
+                           title="Faturamento",
+                           color="forma_pagamento")
+    grafico.show()
+    grafico.write_html(f"faturamento-{coluna}.html")
+
+
